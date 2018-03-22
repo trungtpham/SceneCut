@@ -18,7 +18,8 @@ end_ths = features.end_ths';
 
 sigma_i = 0.3;
 sigma_o = 0.7;
-region_scores = 0.5.*exp(-abs(start_ths - 0).^2./sigma_i^2).*exp(-abs(end_ths - 1).^2./sigma_o^2);
+prior_prob = 0.5;
+region_scores = prior_prob.*exp(-abs(start_ths - 0).^2./sigma_i^2).*exp(-abs(end_ths - 1).^2./sigma_o^2);
 Areas = features.areas;
 too_big_small_regions_ids = Areas>150000 | Areas < 1000;
 region_scores(too_big_small_regions_ids) = 0.001;
