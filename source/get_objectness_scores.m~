@@ -1,0 +1,60 @@
+function [objectness, features] = get_objectness_scores(mask, im, data)
+% data is a Nx3 matrix
+THINTHR = 0.05;
+FLATTHR = 0.001;
+MINLENGTH = 0.02;
+MAXLENGTH = 1.25;
+MINSIZE = 0.01;
+MAXSIZE = 2;
+
+z = data(:,3);
+idx = z < median(z) + 0.5*std(z) & z > median(z) - 0.5*std(z);
+features.inliers = inliers;
+if sum(idx) > 100
+    data = data(idx, :);
+    
+    data = data - repmat(mean(data,1),size(data,1),1);
+    [pc, ~, latent] = pca(data);
+    latent = latent./max(latent);
+
+    pdata = (pc'*data')';
+    ranges = max(pdata) - min(pdata);
+    vx = ranges(1); vy = ranges(2); vz = ranges(3);
+    expansionx = vx;
+    expansiony = vy;
+    expansionz = vz;
+
+    thinness = latent(2);
+    flatness = latent(3);
+    [~, area] = convhull(pdata(:,1),pdata(:,2));
+    compactness = area/(expansionx*expansionx);
+else
+    vx = 0;
+    vy = 0;
+    vz = 0;
+    expansionx = 0;
+    expansiony = 0;
+    expansionz = 0;
+
+    thinness = 0;
+    flatness = 0;
+    area = 0;
+    compactness = 0;
+end
+stats = regionprops(mask, 'Solidity');
+solidity = stats.Solidity;
+im = reshape(im, [425*560 3]);
+R = double(im(mask==1,:));
+S = mean(std(R));
+constant_color = exp(-S/15);
+objectness = (0.25*compactness + 0.25*solidity + 0.5*constant_color);
+
+
+% Color features;
+if (area > MAXSIZE || area < MINSIZE || vz < MINLENGTH || vx > MAXLENGTH) 
+    objectness = objectness.*0.0125;
+else
+   
+%end
+
+end
