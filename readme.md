@@ -2,10 +2,15 @@
 ![SceneCut](doc/SceneCut.png)
 
 ### Update:
-  
+- Add code to generate region hierarchies.
 ### Usage
 - Run demo.m
- 
+
+### Generate region hierarchies from images/ucms
+- Download and install COB network https://github.com/kmaninis/COB, place them at includes/COB. Make sure COB path is added.
+- Pre-computed ucms for the NYU dataset can be downloaded from http://www.vision.ee.ethz.ch/~cvlsegmentation/cob/code.html. Otherwise run img2ucms function (in COB) to generate ucms.
+- Run ucm2tree to generate region hierarchies and node features.
+
 ### Citation:
 If you use this code, please consider citing the following papers:
 
