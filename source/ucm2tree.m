@@ -9,7 +9,7 @@
     lps = hier.leaves_part;
 
     % Compute base features
-    b_feats = compute_base_features(lps, ms, ucms);
+    b_feats = compute_base_features(lps, ms, ucm);
     b_feats.start_ths = start_ths;
     b_feats.end_ths   = end_ths;
     b_feats.im_size   = size(lps);
